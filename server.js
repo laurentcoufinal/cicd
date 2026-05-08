@@ -19,7 +19,7 @@ const BASE_HEADERS = {
   "Referrer-Policy": "strict-origin-when-cross-origin",
 };
 
-function send(res, status, body, contentType = "text/plain; charset=utf-8", extra = {}) {
+unction send(res, status, body, contentType = "text/plain; charset=utf-8", extra = {}) {
   const headers = { "Content-Type": contentType, ...BASE_HEADERS, ...extra };
   if (contentType.includes("text/html")) {
     headers["X-Frame-Options"] = "SAMEORIGIN";
