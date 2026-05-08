@@ -5,7 +5,8 @@
   "description": "Application Node : une seule page statique",
   "scripts": {
     "start": "node server.js",
-    "audit:path": "node scripts/audit-path-safety.mjs"
+    "audit:path": "node scripts/audit-path-safety.mjs",
+    "test": "node --test tests/"
   },
   "engines": {
     "node": ">=18"
