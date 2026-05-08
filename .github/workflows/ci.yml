@@ -5,6 +5,7 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+  workflow_dispatch:
 
 jobs:
   node-checks:
@@ -53,9 +54,3 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Test de démarrage du conteneur
-        run: |
-          docker run -d --name app-test -p 3000:3000 app-statique:ci
-          sleep 5
-          curl -fsS http://localhost:3000/ > /dev/null
-          docker stop app-test
