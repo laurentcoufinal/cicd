@@ -62,10 +62,6 @@ const server = http.createServer((req, res) => {
   });
 });
 
-if (require.main === module) {
-  server.listen(PORT, () => {
-    console.log(`Serveur : http://localhost:${PORT}`);
-  });
-}
-
-module.exports = { server, safePath, PUBLIC_DIR, MIME };
+server.listen(PORT, () => {
+  console.log(`Serveur : http://localhost:${PORT}`);
+});
