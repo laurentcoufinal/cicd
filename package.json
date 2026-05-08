@@ -1,0 +1,13 @@
+{
+  "name": "app-statique",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Application Node : une seule page statique",
+  "scripts": {
+    "start": "node server.js",
+    "audit:path": "node scripts/audit-path-safety.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

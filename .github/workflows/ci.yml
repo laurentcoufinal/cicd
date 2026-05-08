@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  node-checks:
+    name: Vérifications Node.js
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4
+
+      - name: Installation de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Audit de sécurité des chemins
+        run: npm run audit:path
+
+      - name: Démarrage du serveur (smoke test)
+        run: |
+          node server.js &
+          SERVER_PID=$!
+          sleep 3
+          curl -fsS http://localhost:3000/ > /dev/null
+          kill $SERVER_PID
+        env:
+          PORT: 3000
+
+  docker-build:
+    name: Build de l'image Docker
+    runs-on: ubuntu-latest
+    needs: node-checks
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4
+
+      - name: Installation de Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build de l'image Docker
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: app-statique:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Test de démarrage du conteneur
+        run: |
+          docker run -d --name app-test -p 3000:3000 app-statique:ci
+          sleep 5
+          curl -fsS http://localhost:3000/ > /dev/null
+          docker stop app-test

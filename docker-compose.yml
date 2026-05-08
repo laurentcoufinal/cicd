@@ -1,0 +1,23 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: node1:latest
+    environment:
+      - PORT=82
+    ports:
+      - 82:82
+    command:
+      - server.js
+    deploy:
+      replicas: 2
+  nginx: 
+    image: nginx:latest
+    ports:
+      - 83:80
+    depends_on:
+      - app
+    deploy:
+      replicas: 1
+    
